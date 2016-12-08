@@ -37,10 +37,10 @@ tasks.whenTaskAdded { task ->
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '25.0.1'
 
     defaultConfig {
-        applicationId 'me.vickychijwani.spectre'
+        applicationId 'io.ideasquare.android'
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1_005_001      // 3 digits each for major, minor, patch
