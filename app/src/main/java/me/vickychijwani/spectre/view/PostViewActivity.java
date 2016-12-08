@@ -263,9 +263,6 @@ public class PostViewActivity extends BaseActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_view_post:
-                viewPostInBrowser(true);
-                return true;
             case R.id.action_publish:
                 mPostEditFragment.onPublishClicked();
                 return true;

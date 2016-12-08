@@ -2,12 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools"><string name="login_heading1">Connectez vous à votre</string>
     <string name="login_heading2">blog</string>
 
-    <string name="prompt_blog_url">Adresse du blog (blog.exemple.com)</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Mot de passe</string>
     <string name="action_sign_in">Connexion</string>
 
-    <string name="error_invalid_url">Adresse invalide.</string>
     <string name="error_invalid_email">Adresse mail invalide.</string>
     <string name="error_invalid_password">Mot de passe trop court.</string>
     <string name="error_field_required">Champ requis.</string>

@@ -33,7 +33,7 @@
                 android:layout_height="@dimen/toolbar_height"
                 android:contentDescription="@string/user_image"
                 android:padding="@dimen/padding_default"
-                tools:src="@drawable/ic_launcher"
+                tools:src="@mipmap/ic_launcher"
                 />
 
             <TextView

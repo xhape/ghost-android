@@ -1043,7 +1043,7 @@ public class NetworkService {
         String blogUrl = prefs.getString(UserPrefs.Key.BLOG_URL);
         String username = prefs.getString(UserPrefs.Key.USERNAME);
         String password = prefs.getString(UserPrefs.Key.PASSWORD);
-        getBus().post(new LoginStartEvent(blogUrl, username, password, false));
+        getBus().post(new LoginStartEvent(username, password, false));
     }
 
     private void onNewAuthToken(AuthToken authToken) {

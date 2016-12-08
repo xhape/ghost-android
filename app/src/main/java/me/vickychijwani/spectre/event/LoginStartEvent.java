@@ -7,8 +7,8 @@ public class LoginStartEvent {
     public final String password;
     public final boolean initiatedByUser;
 
-    public LoginStartEvent(String blogUrl, String username, String password, boolean initiatedByUser) {
-        this.blogUrl = blogUrl;
+    public LoginStartEvent(String username, String password, boolean initiatedByUser) {
+        this.blogUrl = "http://www.ideamarket.xyz";
         this.username = username;
         this.password = password;
         this.initiatedByUser = initiatedByUser;

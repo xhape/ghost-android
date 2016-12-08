@@ -5,12 +5,10 @@
     <string name="login_heading1">Einloggen in deinen</string>
     <string name="login_heading2">Blog</string>
 
-    <string name="prompt_blog_url">Blogadresse (blog.beispiel.de)</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Passwort</string>
     <string name="action_sign_in">Anmelden</string>
 
-    <string name="error_invalid_url">Diese Url ist ungültig.</string>
     <string name="error_invalid_email">Diese Emailadresse ist ungültig.</string>
     <string name="error_invalid_password">Dieses Passwort ist zu kurz.</string>
     <string name="error_field_required">Bitte fülle dieses Feld aus.</string>

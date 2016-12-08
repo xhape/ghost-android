@@ -2,12 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools"><string name="login_heading1">Prijavi se na svoj</string>
     <string name="login_heading2">blog</string>
 
-    <string name="prompt_blog_url">Blog adresa (blog.primjer.com)</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Lozinka</string>
     <string name="action_sign_in">Prijavi se</string>
 
-    <string name="error_invalid_url">Ovaj URL je neispravan.</string>
     <string name="error_invalid_email">Ova email adresa je neispravna.</string>
     <string name="error_invalid_password">Ova lozinka je prekratka.</string>
     <string name="error_field_required">Ovo polje je obavezno.</string>

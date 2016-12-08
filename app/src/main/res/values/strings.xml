@@ -4,12 +4,10 @@
     <string name="login_heading1">Sign in to your</string>
     <string name="login_heading2">blog</string>
 
-    <string name="prompt_blog_url">Blog address (blog.example.com)</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in</string>
 
-    <string name="error_invalid_url">This URL is invalid.</string>
     <string name="error_invalid_email">This email address is invalid.</string>
     <string name="error_invalid_password">This password is too short.</string>
     <string name="error_field_required">This field is required.</string>
@@ -30,54 +28,54 @@
     <string name="status_offline_changes">Saved on device, waiting to go online…</string>
     <string name="status_published_auto_saved">Changes auto-saved, not published yet</string>
     <string name="status_marked_for_deletion">Marked for deletion, waiting to go online…</string>
-    <string name="status_marked_for_deletion_open_error">That post is marked for deletion, it cannot be opened</string>
-    <string name="post_limit_exceeded" tools:ignore="PluralsCandidate"><![CDATA[%1$s currently only loads the latest %2$d posts from your blog. If you would like to see support for loading older posts, <a href="%3$s">vote for this feature on Github</a> and help me prioritize development.]]></string>
+    <string name="status_marked_for_deletion_open_error">That idea is marked for deletion, it cannot be opened</string>
+    <string name="post_limit_exceeded" tools:ignore="PluralsCandidate"><![CDATA[%1$s currently only loads the latest %2$d ideas from your blog. If you would like to see support for loading older ideas, <a href="%3$s">vote for this feature on Github</a> and help me prioritize development.]]></string>
     <string name="send_feedback">Send Feedback…</string>
 
     <string name="preview">Preview</string>
     <string name="edit">Edit</string>
     <string name="publish">Publish</string>
-    <string name="update_post">Update Post</string>
+    <string name="update_post">Update Idea</string>
     <string name="unpublish">Unpublish</string>
     <string name="alert_publish">Publish draft?</string>
-    <string name="alert_unpublish">Unpublish post?</string>
+    <string name="alert_unpublish">Unpublish idea?</string>
     <string name="delete_draft">Delete draft</string>
     <string name="alert_delete_draft_title">Delete this draft?</string>
     <string name="alert_delete_draft_msg">You will not be able to undo this!</string>
     <string name="alert_delete_yes">Delete</string>
     <string name="alert_delete_no">Keep</string>
-    <string name="post_deleted">Post deleted</string>
-    <string name="alert_save_msg">Update post with changes?</string>
+    <string name="post_deleted">Idea deleted</string>
+    <string name="alert_save_msg">Update idea with changes?</string>
     <string name="alert_save_yes">Yes, update</string>
     <string name="alert_save_no">Not yet</string>
     <string name="discard_changes">Discard changes</string>
-    <string name="alert_discard_changes_title">Discard ALL changes since you opened this post?</string>
+    <string name="alert_discard_changes_title">Discard ALL changes since you opened this idea?</string>
     <string name="alert_discard_changes_msg">There\'s no going back!</string>
     <string name="discard">Discard</string>
     <string name="view_homepage">View homepage</string>
-    <string name="view_post_on_blog">View post on blog</string>
-    <string name="post_settings">Post Settings</string>
+    <string name="view_post_on_blog">View idea on blog</string>
+    <string name="post_settings">Idea Settings</string>
 
-    <string name="save_post_progress">Saving post…</string>
-    <string name="save_post_failed">Couldn\'t save post</string>
+    <string name="save_post_progress">Saving idea…</string>
+    <string name="save_post_failed">Couldn\'t save idea</string>
     <string name="save_post_view">View on blog</string>
     <string name="save_post_timeout">Saved on device</string>
 
     <string name="save_scenario_unknown">Saved</string>
-    <string name="save_scenario_publish_draft">Post published!</string>
-    <string name="save_scenario_unpublish_published_post">Post unpublished</string>
+    <string name="save_scenario_publish_draft">Idea published!</string>
+    <string name="save_scenario_unpublish_published_post">IDea unpublished</string>
     <string name="save_scenario_auto_save_scheduled_or_published_post">Changes saved on device</string>
-    <string name="save_scenario_explicitly_update_scheduled_or_published_post">Post updated</string>
+    <string name="save_scenario_explicitly_update_scheduled_or_published_post">Idea updated</string>
     <string name="save_scenario_auto_save_draft">Draft saved</string>
     <string name="save_scenario_explicitly_save_draft">Draft saved</string>
 
-    <string name="post_title_hint">Give your post a title…</string>
-    <string name="post_image_hint">Add post image</string>
+    <string name="post_title_hint">Give your idea a title…</string>
+    <string name="post_image_hint">Add idea image</string>
     <string name="post_tags_hint">Add some tags…</string>
     <string name="post_tags_format_hint">Use commas to separate tags</string>
     <string name="post_body_hint">Type something here…</string>
-    <string name="post_image_load_error">Error loading post image</string>
-    <string name="post_feature_hint">Feature this post</string>
+    <string name="post_image_load_error">Error loading idea image</string>
+    <string name="post_feature_hint">Feature this idea</string>
 
     <!-- formatting toolbar -->
     <string name="format_bold">Bold</string>
@@ -95,11 +93,11 @@
     <string name="remove_image">Remove This Image</string>
 
     <!-- conflict resolution -->
-    <string name="conflict_explanation"><![CDATA[<b>The post <i>%s</i> has a conflict.</b> It was updated on the server before your device\'s copy could be uploaded. Which version of the post would you like to keep?]]></string>
+    <string name="conflict_explanation"><![CDATA[<b>The idea <i>%s</i> has a conflict.</b> It was updated on the server before your device\'s copy could be uploaded. Which version of the idea would you like to keep?]]></string>
     <string name="conflict_choice_use_device_copy">Upload device copy</string>
     <string name="conflict_choice_use_server_copy">Download server copy</string>
     <string name="conflict_last_update_at">Last updated at %s</string>
-    <string name="conflict_post_preview_title">The below copy of the post will be kept:</string>
+    <string name="conflict_post_preview_title">The below copy of the idea will be kept:</string>
     <string name="conflict_post_preview_status"><![CDATA[Post status: <b>%s</b>]]></string>
 
     <!-- about -->
@@ -146,6 +144,6 @@
 
     <!-- content descriptions -->
     <string name="user_image">User image</string>
-    <string name="cdesc_post_image">Post image</string>
+    <string name="cdesc_post_image">Idea image</string>
 
 </resources>

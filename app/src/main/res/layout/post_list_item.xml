@@ -22,7 +22,7 @@
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
             android:contentDescription="@string/cdesc_post_image"
-            tools:src="@drawable/ic_launcher"
+            tools:src="@mipmap/ic_launcher"
             />
 
         <TextView
@@ -37,7 +37,7 @@
             android:paddingStart="@dimen/padding_large"
             android:paddingTop="@dimen/padding_large"
             android:textAppearance="@style/TextAppearance.Light"
-            tools:text="This is a very, very, very, very loooooong post title"
+            tools:text="This is a very, very, very, very loooooong idea"
             />
 
         <ImageView

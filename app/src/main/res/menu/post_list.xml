@@ -4,24 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_view_homepage"
-        android:title="@string/view_homepage"
-        app:showAsAction="never"
-        />
-
-    <item
-        android:id="@+id/action_refresh"
-        android:title="@string/refresh"
-        app:showAsAction="never"
-        />
-
-    <item
-        android:id="@+id/action_feedback"
-        android:title="@string/send_feedback"
-        app:showAsAction="never"
-        />
-
-    <item
         android:id="@+id/action_about"
         android:title="@string/about_action"
         app:showAsAction="never"

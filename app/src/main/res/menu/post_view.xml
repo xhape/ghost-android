@@ -21,12 +21,6 @@
         />
 
     <item
-        android:id="@+id/action_view_post"
-        android:title="@string/view_post_on_blog"
-        app:showAsAction="never"
-        />
-
-    <item
         android:id="@+id/action_unpublish"
         android:title="@string/unpublish"
         app:showAsAction="never"

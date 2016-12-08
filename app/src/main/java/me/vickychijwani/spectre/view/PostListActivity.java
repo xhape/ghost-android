@@ -256,16 +256,6 @@ public class PostListActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_view_homepage:
-                UserPrefs prefs = UserPrefs.getInstance(SpectreApplication.getInstance());
-                startBrowserActivity(prefs.getString(UserPrefs.Key.BLOG_URL));
-                return true;
-            case R.id.action_refresh:
-                refreshData(false);
-                return true;
-            case R.id.action_feedback:
-                AppUtils.emailDeveloper(this);
-                return true;
             case R.id.action_about:
                 Intent aboutIntent = new Intent(this, AboutActivity.class);
                 startActivity(aboutIntent);
