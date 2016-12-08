@@ -590,7 +590,6 @@ public class PostEditFragment extends BaseFragment implements
                     messageId = R.string.save_scenario_explicitly_update_scheduled_or_published_post;
                 }
                 Snackbar sn = Snackbar.make(parent, messageId, Snackbar.LENGTH_LONG);
-                sn.setAction(R.string.save_post_view, v -> mActivity.viewPostInBrowser(false));
                 sn.show();
                 break;
             case UNPUBLISH_PUBLISHED_POST:

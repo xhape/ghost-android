@@ -63,7 +63,7 @@
 
     <string name="save_scenario_unknown">Saved</string>
     <string name="save_scenario_publish_draft">Idea published!</string>
-    <string name="save_scenario_unpublish_published_post">IDea unpublished</string>
+    <string name="save_scenario_unpublish_published_post">Idea unpublished</string>
     <string name="save_scenario_auto_save_scheduled_or_published_post">Changes saved on device</string>
     <string name="save_scenario_explicitly_update_scheduled_or_published_post">Idea updated</string>
     <string name="save_scenario_auto_save_draft">Draft saved</string>
