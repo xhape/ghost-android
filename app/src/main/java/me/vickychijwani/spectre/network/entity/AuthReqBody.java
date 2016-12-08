@@ -18,7 +18,7 @@ public class AuthReqBody {
         this.grantType = "password";
         this.username = username;
         this.password = password;
-        this.clientId = "ghost-admin";
+        this.clientId = "ideamarket-admin";
         this.clientSecret = clientSecret;
     }
 
