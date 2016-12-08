@@ -44,7 +44,7 @@ interface GhostApiService {
 
     // posts
     // FIXME (issue #81) only allowing N posts right now to avoid too much data transfer
-    @GET("/posts/?status=all&staticPages=all&include=tags")
+    @GET("/posts/?status=all&&include=tags")
     void getPosts(@Header("If-None-Match") String etag, @Query("limit") int numPosts,
                   Callback<PostList> cb);
 
