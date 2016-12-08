@@ -1,9 +1,5 @@
 package me.vickychijwani.spectre.model;
 
-import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
-
 import io.realm.DynamicRealm;
 import io.realm.DynamicRealmObject;
 import io.realm.FieldAttribute;
@@ -20,7 +16,6 @@ public class DatabaseMigration implements RealmMigration {
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         RealmSchema schema = realm.getSchema();
-        Crashlytics.log(Log.INFO, TAG, "MIGRATING DATABASE from v" + oldVersion + " to v" + newVersion);
 
         if (oldVersion == 0) {
             if (schema.get("Post").isNullable("slug")) {
@@ -29,7 +24,6 @@ public class DatabaseMigration implements RealmMigration {
                         .where(Post.class.getSimpleName())
                         .isNull("slug")
                         .findAll();
-                Crashlytics.log(Log.DEBUG, TAG, "CONVERTING " + postsWithNullSlug.size() + " SLUGS FROM NULL TO \"\"");
                 for (DynamicRealmObject obj : postsWithNullSlug) {
                     obj.setString("slug", "");
                 }
@@ -70,12 +64,10 @@ public class DatabaseMigration implements RealmMigration {
                     .or()
                     .equalTo("type", ETag.TYPE_ALL_POSTS)
                     .findAll();
-            Crashlytics.log(Log.DEBUG, TAG, "DELETING ALL ETAGS TO REFRESH DATA COMPLETELY");
             allEtags.deleteAllFromRealm();
 
             if (!schema.contains("Role")) {
                 // create the Role table
-                Crashlytics.log(Log.DEBUG, TAG, "CREATING ROLE TABLE");
                 schema.create("Role")
                         .addField("id", Integer.class, FieldAttribute.PRIMARY_KEY)
                         .addField("uuid", String.class, FieldAttribute.REQUIRED)
@@ -84,7 +76,6 @@ public class DatabaseMigration implements RealmMigration {
             }
 
             if (!schema.get("User").hasField("roles")) {
-                Crashlytics.log(Log.DEBUG, TAG, "ADDING ROLES FIELD TO USER TABLE");
                 schema.get("User").addRealmListField("roles", schema.get("Role"));
             }
             ++oldVersion;
@@ -92,7 +83,6 @@ public class DatabaseMigration implements RealmMigration {
 
         if (oldVersion == 2) {
             if (!schema.get("Post").hasField("conflictState")) {
-                Crashlytics.log(Log.DEBUG, TAG, "ADDING CONFLICT STATE FIELD TO POST TABLE");
                 schema.get("Post").addField("conflictState", String.class, FieldAttribute.REQUIRED);
             }
             ++oldVersion;

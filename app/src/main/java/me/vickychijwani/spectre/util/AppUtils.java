@@ -8,14 +8,9 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.DisplayMetrics;
 import android.widget.Toast;
-
-import com.crashlytics.android.Crashlytics;
-
 import java.util.Locale;
-
 import me.vickychijwani.spectre.R;
 import me.vickychijwani.spectre.view.BaseActivity;
 
@@ -55,8 +50,6 @@ public class AppUtils {
                 return context.getString(R.string.version_unknown);
             }
         } catch (PackageManager.NameNotFoundException e) {
-            Crashlytics.logException(new RuntimeException("Failed to get package info, " +
-                    "see previous exception for details", e));
             return context.getString(R.string.version_unknown);
         }
     }

@@ -15,9 +15,6 @@ import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-
-import com.crashlytics.android.Crashlytics;
-
 import me.vickychijwani.spectre.BuildConfig;
 import me.vickychijwani.spectre.R;
 import me.vickychijwani.spectre.view.BundleKeys;
@@ -176,7 +173,7 @@ public class WebViewFragment extends BaseFragment {
             if (BuildConfig.DEBUG) {
                 handler.proceed();      // ignore in debug builds
             } else {
-                Crashlytics.logException(new RuntimeException("SSL error: " + error.toString()));
+
             }
         }
     }

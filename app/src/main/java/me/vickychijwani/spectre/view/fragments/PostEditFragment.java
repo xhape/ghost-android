@@ -14,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,18 +22,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import com.crashlytics.android.Crashlytics;
-import com.github.slugify.Slugify;
-import com.squareup.otto.Subscribe;
-
-import java.io.IOException;
-
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import com.github.slugify.Slugify;
+import com.squareup.otto.Subscribe;
 import io.realm.RealmList;
+import java.io.IOException;
 import me.vickychijwani.spectre.R;
-import me.vickychijwani.spectre.analytics.AnalyticsService;
 import me.vickychijwani.spectre.event.FileUploadErrorEvent;
 import me.vickychijwani.spectre.event.FileUploadEvent;
 import me.vickychijwani.spectre.event.FileUploadedEvent;
@@ -368,7 +362,6 @@ public class PostEditFragment extends BaseFragment implements
         mUploadProgress.dismiss();
         mUploadProgress = null;
         if (mImageUploadDoneAction == null) {
-            Crashlytics.log(Log.ERROR, TAG, "No 'image upload done action' found!");
             return;
         }
         mImageUploadDoneAction.call(event.relativeUrl);
@@ -514,8 +507,7 @@ public class PostEditFragment extends BaseFragment implements
                 .setMessage(msg)
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     if (finalTargetStatus.equals(mPost.getStatus())) {
-                        Crashlytics.logException(new IllegalStateException("UI is messed up, " +
-                                "desired post status is same as current status!"));
+
                     }
                     // This will not be triggered when updating a published post, that goes through
                     // onSaveClicked(). It is assumed the user will ALWAYS want to synchronize the
@@ -527,7 +519,7 @@ public class PostEditFragment extends BaseFragment implements
                             mPost.setTitle(mPostTitleEditView.getText().toString());
                             mPost.setSlug(new Slugify().slugify(mPost.getTitle()));
                         } catch (IOException e) {
-                            Crashlytics.logException(e);
+
                         }
                     }
                     saveToServerExplicitly(finalTargetStatus);
@@ -564,14 +556,11 @@ public class PostEditFragment extends BaseFragment implements
             return;
         }
         if (mSaveScenario == SaveScenario.UNKNOWN) {
-            AnalyticsService.logPostSavedInUnknownScenario();
             Snackbar.make(getView(), R.string.save_scenario_unknown, Snackbar.LENGTH_SHORT).show();
         } else if (mSaveScenario == SaveScenario.AUTO_SAVE_PUBLISHED_POST) {
-            AnalyticsService.logPublishedPostAutoSavedLocally();
             Snackbar.make(getView(), R.string.save_scenario_auto_save_scheduled_or_published_post, Snackbar.LENGTH_SHORT).show();
             mSaveScenario = SaveScenario.UNKNOWN;
         } else if (mSaveScenario == SaveScenario.AUTO_SAVE_SCHEDULED_POST) {
-            AnalyticsService.logScheduledPostAutoSavedLocally();
             Snackbar.make(getView(), R.string.save_scenario_auto_save_scheduled_or_published_post, Snackbar.LENGTH_SHORT).show();
             mSaveScenario = SaveScenario.UNKNOWN;
         } else {
@@ -597,29 +586,23 @@ public class PostEditFragment extends BaseFragment implements
                     messageId = R.string.save_scenario_publish_draft;
                     // FIXME not a good idea to put this in UI code - what if this happens in the background?!
                     // FIXME or, what if the user publishes offline and syncs later - save scenario would be unknown then!
-                    AnalyticsService.logDraftPublished(postUrl);
                 } else {
                     messageId = R.string.save_scenario_explicitly_update_scheduled_or_published_post;
-                    AnalyticsService.logPublishedPostUpdated(postUrl);
                 }
                 Snackbar sn = Snackbar.make(parent, messageId, Snackbar.LENGTH_LONG);
                 sn.setAction(R.string.save_post_view, v -> mActivity.viewPostInBrowser(false));
                 sn.show();
                 break;
             case UNPUBLISH_PUBLISHED_POST:
-                AnalyticsService.logPostUnpublished();
                 Snackbar.make(parent, R.string.save_scenario_unpublish_published_post, Snackbar.LENGTH_SHORT).show();
                 break;
             case AUTO_SAVE_DRAFT:
-                AnalyticsService.logDraftAutoSaved();
                 Snackbar.make(parent, R.string.save_scenario_auto_save_draft, Snackbar.LENGTH_SHORT).show();
                 break;
             case EXPLICITLY_SAVE_DRAFT:
-                AnalyticsService.logDraftSavedExplicitly();
                 Snackbar.make(parent, R.string.save_scenario_explicitly_save_draft, Snackbar.LENGTH_SHORT).show();
                 break;
             case EXPLICITLY_UPDATE_SCHEDULED_POST:
-                AnalyticsService.logScheduledPostUpdated(PostUtils.getPostUrl(mPost));
                 Snackbar.make(parent, R.string.save_scenario_explicitly_update_scheduled_or_published_post, Snackbar.LENGTH_SHORT).show();
                 break;
             case AUTO_SAVE_SCHEDULED_POST:

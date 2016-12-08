@@ -7,16 +7,11 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
-
 import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
-
 import me.vickychijwani.spectre.R;
 import me.vickychijwani.spectre.SpectreApplication;
 import me.vickychijwani.spectre.model.entity.PendingAction;
@@ -61,7 +56,6 @@ public class PostUtils {
         // at this point, we know both lhs and rhs belong to the same group (new, scheduled, drafts,
         // published). NOTE: (-) sign because we want to sort in reverse chronological order.
         if ((isLhsPublished || isLhsScheduled)) {
-            // FIXME Crashlytics issue #110 - published posts can have null date - why?
             if (lhs.getPublishedAt() != null && rhs.getPublishedAt() != null) {
                 // use date published for sorting scheduled or published posts ...
                 return -lhs.getPublishedAt().compareTo(rhs.getPublishedAt());
@@ -116,8 +110,6 @@ public class PostUtils {
             String permalinkFormat = prefs.getString(UserPrefs.Key.PERMALINK_FORMAT);
             Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
             Date publishedAt = post.getPublishedAt();
-            // FIXME temp if check for Crashlytics issue #110
-            // Calendar.getInstance() is set to current time by default, and Ghost helpfully changes it to the correct date anyway
             if (publishedAt != null) {
                 calendar.setTime(publishedAt);
             }
@@ -128,11 +120,8 @@ public class PostUtils {
                     .replace(":day", String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH)))
                     .replace(":slug", post.getSlug());
             String postUrl = NetworkUtils.makeAbsoluteUrl(blogUrl, postPath);
-            // FIXME temp logs for Crashlytics issue #110
             if (publishedAt == null) {
-                Crashlytics.log(Log.ERROR, "PostUtils", "PUBLISHED POST WITH NULL DATE FOUND!");
-                Crashlytics.log(Log.ERROR, "PostUtils", "Returning URL with current date instead: " + postUrl);
-                Crashlytics.logException(new IllegalStateException("PUBLISHED POSTS MUST NOT HAVE A NULL DATE!"));
+
             }
             return postUrl;
         } else if (post.isDraft() || post.isScheduled()) {

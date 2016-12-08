@@ -1,8 +1,5 @@
 package me.vickychijwani.spectre.network;
 
-import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -10,10 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
-
 import java.lang.reflect.Type;
 import java.util.Map;
-
 import me.vickychijwani.spectre.model.entity.ConfigurationParam;
 import me.vickychijwani.spectre.network.entity.ConfigurationList;
 
@@ -35,8 +30,6 @@ import me.vickychijwani.spectre.network.entity.ConfigurationList;
                 return parseArrayOfEntriesConfig(configJsons);
             }
         } catch (Exception e) {
-            // FIXME temp log to help debug Crashlytics issue #87
-            Crashlytics.log(Log.DEBUG, "ParseException", "Exception thrown while trying to parse JSON: " + element.toString());
             throw e;
         }
     }
@@ -71,7 +64,6 @@ import me.vickychijwani.spectre.network.entity.ConfigurationList;
             valueStr = "";  // Ghost 0.8.0 gives an empty string instead of null, when no mail transport is set
                             // we don't care about the mail transport anyhow
         } else if (value == null) {
-            // FIXME temp log to help debug Crashlytics issue #87
             throw new NullPointerException("value for key '" + key + "' is null!");
         } else if (value.isString()) {
             valueStr = value.getAsString();

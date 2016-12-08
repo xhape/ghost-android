@@ -1,15 +1,10 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'https://maven.fabric.io/public' }
     }
 
     dependencies {
         classpath 'me.tatarka:gradle-retrolambda:3.2.5'
-        // The Fabric Gradle plugin uses an open ended version to react
-        // quickly to Android tooling updates
-        //noinspection GradleDynamicVersion
-        classpath 'io.fabric.tools:gradle:1.+'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
         classpath 'com.jakewharton.hugo:hugo-plugin:1.2.1'
     }
@@ -17,13 +12,11 @@ buildscript {
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
-apply plugin: 'io.fabric'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'com.jakewharton.hugo'
 
 repositories {
     mavenCentral()
-    maven { url 'https://maven.fabric.io/public' }
     maven { url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo' }
 }
 
@@ -43,7 +36,7 @@ android {
         applicationId 'io.ideasquare.android'
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 1_005_001      // 3 digits each for major, minor, patch
+        versionCode 1      // 3 digits each for major, minor, patch
         versionName '1.5.1'
 
         // enable support for vector drawables on API < 21
@@ -64,13 +57,11 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix '.debug'
-            ext.enableCrashlytics = false
         }
         release {
 //            signingConfig signingConfigs.release
             minifyEnabled false   // FIXME disabled because login, revoke token strangely stopped working
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ext.enableCrashlytics = true
         }
     }
     lintOptions {
@@ -80,19 +71,6 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/services/javax.annotation.processing.Processor'
-    }
-}
-
-// Fabric / Crashlytics keys are mandatory for release builds
-task checkFabricPropertiesExists << {
-    if (!file('fabric.properties').exists()) {
-        throw new GradleException('Missing fabric.properties file for Fabric / Crashlytics!')
-    }
-}
-
-tasks.whenTaskAdded { task ->
-    if (task.name == 'assembleRelease') {
-        task.dependsOn checkFabricPropertiesExists
     }
 }
 
@@ -124,12 +102,6 @@ dependencies {
 
     // misc
     compile 'com.jakewharton:butterknife:7.0.0'
-    compile('com.crashlytics.sdk.android:crashlytics:2.6.2@aar') {
-        transitive = true
-    }
-    compile('com.crashlytics.sdk.android:answers:1.3.7@aar') {
-        transitive = true
-    }
     compile 'com.github.slugify:slugify:2.1.3'
 
     // debug

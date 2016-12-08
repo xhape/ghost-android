@@ -14,15 +14,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
-
-import com.crashlytics.android.Crashlytics;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import me.vickychijwani.spectre.R;
 import rx.Observable;
 import rx.functions.Func1;
@@ -82,8 +78,6 @@ public class Observables {
                 subscriber.onNext(bitmap);
             } catch (IOException e) {
                 subscriber.onError(e);
-                Crashlytics.logException(new Exception("Failed to load bitmap, see previous " +
-                        "exception for details", e));
                 Log.e(TAG, Log.getStackTraceString(e));
             } finally {
                 subscriber.onCompleted();

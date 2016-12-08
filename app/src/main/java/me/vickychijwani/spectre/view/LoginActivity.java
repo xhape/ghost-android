@@ -18,14 +18,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import butterknife.Bind;
-import com.crashlytics.android.Crashlytics;
 import com.squareup.otto.Subscribe;
 import java.net.ConnectException;
 import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import me.vickychijwani.spectre.R;
-import me.vickychijwani.spectre.error.LoginFailedException;
 import me.vickychijwani.spectre.event.LoginDoneEvent;
 import me.vickychijwani.spectre.event.LoginErrorEvent;
 import me.vickychijwani.spectre.event.LoginStartEvent;
@@ -166,7 +164,6 @@ public class LoginActivity extends BaseActivity implements
           Toast.makeText(this, getString(R.string.login_unexpected_error),
               Toast.LENGTH_SHORT).show();
         } finally {
-            Crashlytics.logException(new LoginFailedException(error));        // report login failures to Crashlytics
             Log.e(TAG, Log.getStackTraceString(error));
         }
     }

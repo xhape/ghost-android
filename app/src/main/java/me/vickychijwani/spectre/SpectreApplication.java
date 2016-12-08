@@ -7,9 +7,6 @@ import android.os.Build;
 import android.os.StatFs;
 import android.support.annotation.NonNull;
 import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
-import com.crashlytics.android.answers.Answers;
 import com.squareup.okhttp.Cache;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.DeadEvent;
@@ -17,14 +14,10 @@ import com.squareup.otto.Subscribe;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 import com.tsengvn.typekit.Typekit;
-
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
-import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import me.vickychijwani.spectre.analytics.AnalyticsService;
+import java.io.File;
+import java.util.concurrent.TimeUnit;
 import me.vickychijwani.spectre.event.ApiErrorEvent;
 import me.vickychijwani.spectre.event.BusProvider;
 import me.vickychijwani.spectre.model.DatabaseMigration;
@@ -45,14 +38,9 @@ public class SpectreApplication extends Application {
     protected OkHttpClient mOkHttpClient = null;
     protected Picasso mPicasso = null;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private AnalyticsService mAnalyticsService = null;
-
     @Override
     public void onCreate() {
         super.onCreate();
-        Fabric.with(this, new Crashlytics(), new Answers());
-        Crashlytics.log(Log.DEBUG, TAG, "APP LAUNCHED");
         BusProvider.getBus().register(this);
         sInstance = this;
 
@@ -61,9 +49,6 @@ public class SpectreApplication extends Application {
         initOkHttpClient();
         initPicasso();
         new NetworkService().start(this, mOkHttpClient);
-
-        mAnalyticsService = new AnalyticsService(BusProvider.getBus());
-        mAnalyticsService.start();
     }
 
     private void setupRealm() {
@@ -73,7 +58,6 @@ public class SpectreApplication extends Application {
                 .migration(new DatabaseMigration())
                 .build();
         Realm.setDefaultConfiguration(config);
-        AnalyticsService.logDbSchemaVersion(String.valueOf(DB_SCHEMA_VERSION));
     }
 
     private void setupFonts() {

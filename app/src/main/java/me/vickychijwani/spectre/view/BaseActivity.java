@@ -10,20 +10,15 @@ import android.support.customtabs.CustomTabsIntent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
-
-import com.crashlytics.android.Crashlytics;
+import butterknife.ButterKnife;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import com.tsengvn.typekit.TypekitContextWrapper;
-
 import java.util.List;
-
-import butterknife.ButterKnife;
 import me.vickychijwani.spectre.R;
 import me.vickychijwani.spectre.SpectreApplication;
 import me.vickychijwani.spectre.event.BusProvider;
@@ -46,7 +41,6 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onCreate()");
         getBus().register(this);
     }
 
@@ -58,7 +52,6 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onStart()");
         if (! (this instanceof LoginActivity)) {
             mPasswordChangedEventHandler = new PasswordChangedEventHandler(this);
             getBus().register(mPasswordChangedEventHandler);
@@ -68,19 +61,12 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onResume()");
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onPause()");
-    }
 
     @Override
     protected void onStop() {
         super.onStop();
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onStop()");
         if (mPasswordChangedEventHandler != null) {
             getBus().unregister(mPasswordChangedEventHandler);
             mPasswordChangedEventHandler = null;
@@ -90,20 +76,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onDestroy()");
         getBus().unregister(this);
-    }
-
-    @Override
-    public void onLowMemory() {
-        super.onLowMemory();
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onLowMemory()");
-    }
-
-    @Override
-    public void onTrimMemory(int level) {
-        super.onTrimMemory(level);
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onTrimMemory()");
     }
 
     @Override
@@ -119,7 +92,6 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Crashlytics.log(Log.DEBUG, TAG, this.getClass().getSimpleName() + "#onBackPressed()");
         List<Fragment> fragments = getSupportFragmentManager().getFragments();
         if (fragments != null) {
             for (Fragment f : fragments) {

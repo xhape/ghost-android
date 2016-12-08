@@ -17,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,21 +29,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.crashlytics.android.Crashlytics;
+import butterknife.Bind;
+import butterknife.BindDimen;
+import butterknife.ButterKnife;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Callback;
-
+import io.realm.RealmList;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import butterknife.Bind;
-import butterknife.BindDimen;
-import butterknife.ButterKnife;
-import io.realm.RealmList;
 import me.vickychijwani.spectre.R;
 import me.vickychijwani.spectre.event.DeletePostEvent;
 import me.vickychijwani.spectre.event.LoadTagsEvent;
@@ -175,7 +170,6 @@ public class PostViewActivity extends BaseActivity implements
         }
         mPost = bundle.getParcelable(BundleKeys.POST);
         //noinspection ConstantConditions
-        Crashlytics.log(Log.DEBUG, TAG, "[onCreate] post id = " + mPost.getId());
 
         @PostViewFragmentPagerAdapter.TabPosition int startingTabPosition =
                 PostViewFragmentPagerAdapter.TAB_POSITION_PREVIEW;
@@ -378,7 +372,6 @@ public class PostViewActivity extends BaseActivity implements
         if (event.postId != mPost.getId()) {
             RuntimeException e = new IllegalArgumentException("Received post deleted event for id = "
                     + event.postId + ", current id = " + mPost.getId());
-            Crashlytics.log(Log.ERROR, TAG, e.getMessage());
             throw e;
         }
         setResult(RESULT_CODE_DELETED);
@@ -388,7 +381,6 @@ public class PostViewActivity extends BaseActivity implements
     private void updatePost(@NonNull Post newPost) {
         mPost = newPost;
         ((PostViewFragmentPagerAdapter) mViewPager.getAdapter()).setPost(mPost);
-        // Crashlytics issue 104: fragments can be null when a draft gets uploaded right
         // after this screen is opened, but *before* the fragments could be initialized.
         // No need to handle this separately, as the ViewPager's adapter will correctly pass
         // the new post to these fragments when creating them later.

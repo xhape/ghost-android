@@ -4,18 +4,19 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.crashlytics.android.Crashlytics;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import io.realm.Case;
+import io.realm.Realm;
+import io.realm.RealmModel;
+import io.realm.RealmObject;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import java.io.File;
 import java.net.HttpURLConnection;
 import java.util.ArrayDeque;
@@ -27,20 +28,8 @@ import java.util.Deque;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import io.realm.Case;
-import io.realm.Realm;
-import io.realm.RealmModel;
-import io.realm.RealmObject;
-import io.realm.RealmQuery;
-import io.realm.RealmResults;
-import io.realm.Sort;
 import me.vickychijwani.spectre.BuildConfig;
 import me.vickychijwani.spectre.SpectreApplication;
-import me.vickychijwani.spectre.analytics.AnalyticsService;
-import me.vickychijwani.spectre.error.ExpiredTokenUsedException;
-import me.vickychijwani.spectre.error.PostConflictFoundException;
-import me.vickychijwani.spectre.error.TokenRevocationFailedException;
 import me.vickychijwani.spectre.event.ApiCallEvent;
 import me.vickychijwani.spectre.event.ApiErrorEvent;
 import me.vickychijwani.spectre.event.BlogSettingsLoadedEvent;
@@ -99,6 +88,8 @@ import me.vickychijwani.spectre.pref.UserPrefs;
 import me.vickychijwani.spectre.util.DateTimeUtils;
 import me.vickychijwani.spectre.util.NetworkUtils;
 import me.vickychijwani.spectre.util.PostUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit.Callback;
 import retrofit.RequestInterceptor;
 import retrofit.ResponseCallback;
@@ -135,7 +126,6 @@ public class NetworkService {
     private final ArrayDeque<ApiCallEvent> mRefreshEventsQueue = new ArrayDeque<>();
 
     public NetworkService() {
-        Crashlytics.log(Log.DEBUG, TAG, "Initializing NetworkService...");
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Date.class, new DateDeserializer())
                 .registerTypeAdapter(ConfigurationList.class, new ConfigurationListDeserializer())
@@ -573,7 +563,6 @@ public class NetworkService {
 
     @Subscribe
     public void onCreatePostEvent(final CreatePostEvent event) {
-        Crashlytics.log(Log.DEBUG, TAG, "[onCreatePostEvent] creating new post");
         Post newPost = new Post();
         newPost.addPendingAction(PendingAction.CREATE);
         newPost.setUuid(getTempUniqueId(Post.class));
@@ -670,11 +659,9 @@ public class NetworkService {
         // this is unlike JavaScript, in which the same loop variable is mutated
         for (final Post localPost : localDeletedPosts) {
             if (! validateAccessToken(event)) return;
-            Crashlytics.log(Log.DEBUG, TAG, "[onSyncPostsEvent] deleting post id = " + localPost.getId());
             mApi.deletePost(localPost.getId(), new ResponseCallback() {
                 @Override
                 public void success(Response response) {
-                    AnalyticsService.logDraftDeleted();
                     mPostUploadQueue.removeFirstOccurrence(localPost);
                     postsToDelete.add(localPost);
                     if (mPostUploadQueue.isEmpty()) syncFinishedCB.call();
@@ -690,11 +677,9 @@ public class NetworkService {
         // 2. NEW POSTS
         for (final Post localPost : localNewPosts) {
             if (! validateAccessToken(event)) return;
-            Crashlytics.log(Log.DEBUG, TAG, "[onSyncPostsEvent] creating post");    // local new posts don't have an id
             mApi.createPost(PostStubList.from(localPost), new Callback<PostList>() {
                 @Override
                 public void success(PostList postList, Response response) {
-                    AnalyticsService.logNewDraftUploaded();
                     createOrUpdateModel(postList.posts);
                     mPostUploadQueue.removeFirstOccurrence(localPost);
                     postsToDelete.add(localPost);
@@ -712,7 +697,6 @@ public class NetworkService {
 
         // 3. EDITED POSTS
         Action1<Post> uploadEditedPost = (editedPost) -> {
-            Crashlytics.log(Log.DEBUG, TAG, "[onSyncPostsEvent] updating post id = " + editedPost.getId());
             PostStubList postStubList = PostStubList.from(editedPost);
             mApi.updatePost(editedPost.getId(), postStubList, new Callback<PostList>() {
                 @Override
@@ -731,7 +715,6 @@ public class NetworkService {
         };
         for (final Post localPost : localEditedPosts) {
             if (! validateAccessToken(event)) return;
-            Crashlytics.log(Log.DEBUG, TAG, "[onSyncPostsEvent] downloading edited post with id = " + localPost.getId() + " for comparison");
             mApi.getPost(localPost.getId(), new Callback<PostList>() {
                 @Override
                 public void success(PostList postList, Response response) {
@@ -743,16 +726,10 @@ public class NetworkService {
                                 && !serverPost.getUpdatedAt().equals(localPost.getUpdatedAt()));
                     }
                     if (hasConflict && PostUtils.isDirty(serverPost, localPost)) {
-                        Crashlytics.log(Log.WARN, TAG, "[onSyncPostsEvent] conflict found for post id = " + localPost.getId());
                         mPostUploadQueue.removeFirstOccurrence(localPost);
                         if (mPostUploadQueue.isEmpty()) syncFinishedCB.call();
                         localPost.setConflictState(Post.CONFLICT_UNRESOLVED);
                         createOrUpdateModel(localPost);
-                        Crashlytics.log(Log.DEBUG, TAG, "localPost updated at:" + localPost.getUpdatedAt().toString());
-                        Crashlytics.log(Log.DEBUG, TAG, "serverPost updated at: " + serverPost.getUpdatedAt().toString());
-                        Crashlytics.log(Log.DEBUG, TAG, "localPost contents:\n" + localPost.getMarkdown());
-                        Crashlytics.log(Log.DEBUG, TAG, "serverPost contents:\n" + serverPost.getMarkdown());
-                        Crashlytics.logException(new PostConflictFoundException());
                         getBus().post(new PostConflictFoundEvent(localPost, serverPost));
                     } else {
                         uploadEditedPost.call(localPost);
@@ -774,11 +751,10 @@ public class NetworkService {
         Post realmPost = mRealm.where(Post.class)
                 .equalTo("id", event.post.getId())
                 .findFirst();
-        Crashlytics.log(Log.DEBUG, TAG, "[onSavePostEvent] post id = " + event.post.getId());
 
         if (realmPost.hasPendingAction(PendingAction.DELETE)) {
             RuntimeException e = new IllegalArgumentException("Trying to save deleted post with id = " + realmPost.getId());
-            Crashlytics.logException(e);
+            //todo log to analytics
         }
 
         // TODO bug in edge-case:
@@ -822,12 +798,11 @@ public class NetworkService {
     @Subscribe
     public void onDeletePostEvent(DeletePostEvent event) {
         int postId = event.post.getId();
-        Crashlytics.log(Log.DEBUG, TAG, "[onDeletePostEvent] post id = " + postId);
 
         Post realmPost = mRealm.where(Post.class).equalTo("id", postId).findFirst();
         if (realmPost == null) {
             RuntimeException e = new IllegalArgumentException("Trying to delete post with non-existent id = " + postId);
-            Crashlytics.logException(e);
+            //todo log to analytics
         } else if (realmPost.hasPendingAction(PendingAction.CREATE)) {
             deleteModel(realmPost);
             getBus().post(new PostDeletedEvent(postId));
@@ -845,7 +820,6 @@ public class NetworkService {
     @Subscribe
     public void onFileUploadEvent(FileUploadEvent event) {
         if (! validateAccessToken(event)) return;
-        Crashlytics.log(Log.DEBUG, TAG, "[onFileUploadEvent] uploading file");
 
         TypedFile typedFile = new TypedFile(event.mimeType, new File(event.path));
         mApi.uploadFile(typedFile, new Callback<String>() {
@@ -900,15 +874,13 @@ public class NetworkService {
                 @Override
                 public void onSuccess(JSONObject json, Response response) {
                     if (json.has("error")) {
-                        Crashlytics.logException(new TokenRevocationFailedException(
-                                reqBody.tokenTypeHint, json.optString("error")));
+                        //todo log to analytics
                     }
                 }
 
                 @Override
                 public void onFailure(RetrofitError error) {
-                    Crashlytics.logException(new TokenRevocationFailedException(
-                            reqBody.tokenTypeHint, error));
+                    //todo log to analytics
                 }
             });
         }
@@ -980,7 +952,6 @@ public class NetworkService {
                 // expiration time is changed inside Ghost (#92)
                 if (NetworkUtils.isUnauthorized(error)) {
                     postLoginStartEvent();
-                    Crashlytics.logException(new ExpiredTokenUsedException(error));
                 } else {
                     getBus().post(new LoginErrorEvent(error, null, false));
                     flushApiEventQueue(true);
