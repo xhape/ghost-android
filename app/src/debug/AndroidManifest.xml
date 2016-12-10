@@ -6,7 +6,7 @@
 
     <application
         tools:replace="android:name"
-        android:name=".DebugSpectreApplication"
+        android:name="io.ideasqure.android.spectre.DebugSpectreApplication"
         />
 
 </manifest>

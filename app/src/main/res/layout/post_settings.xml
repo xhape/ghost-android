@@ -62,7 +62,7 @@
 
 
     <!-- tags -->
-    <me.vickychijwani.spectre.view.widget.ChipsEditText
+    <io.ideasquare.android.view.widget.ChipsEditText
         android:id="@+id/post_tags_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
